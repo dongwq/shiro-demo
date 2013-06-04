@@ -1,0 +1,33 @@
+
+Grails Shiro Plugin之初体验
+http://www.groovyq.net/node/21
+
+
+1. 添加
+Dependency :
+compile ":shiro:1.1.4"
+2. 安装后初始化
+grails shiro-quick-start --prefix=org.example.Shiro
+
+
+Created file grails-app/domain/net/unitedcloud/ShiroUser.groovy
+| Created file grails-app/domain/net/unitedcloud/ShiroRole.groovy
+| Created file grails-app/realms/net/unitedcloud/ShiroDbRealm.groovy
+| Created file grails-app/controllers/net/unitedcloud/AuthController.groovy
+| Created file grails-app/views/auth/login.gsp
+| Created file grails-app/conf/net/unitedcloud/ShiroSecurityFilters.groovy
+3. 添加一个用户
+def init = { servletContext ->
+        def user = new ShiroUser(username: "user123", passwordHash: new Sha256Hash("password").toHex())
+        user.addToPermissions("*:*")
+        user.save()
+    }
+
+  如果没有添加用户，也就同有授权，就不会有相应的安全过滤。
+4.
+
+Remember me?
+By default the plugin only grants access to an authenticated user, i.e. one that has explicitly logged in during the current session. You can allow access to both authenticated users and remembered users by setting security.shiro.authc.required = false in your Config.groovy file or by changing the line in grails-app/conf/SecurityFilters.groovy to accessControl(auth: false) .
+
+The tags <shiro:isLoggedIn> and <shiro:authenticated> check for an authenticated user, the tag <shiro:user> checks for a known user (authenticated or remembered) and the tag <shiro:remembered> checks only for a remembered user.
+
